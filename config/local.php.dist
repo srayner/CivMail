@@ -1,0 +1,18 @@
+<?php
+
+return array(
+    'CivMail' => array(
+        'transport_options' => array(
+            'name'              => 'yourdomain',
+            'host'              => 'smtp.yourdomain',
+            'port'              => 465,
+            'connection_class'  => 'login',
+            'connection_config' => array(
+                'ssl'               => 'ssl',
+                'username'          => 'yourusername',
+                'password'          => 'yourpassword',
+            ),
+        ),
+        
+    ),
+);
