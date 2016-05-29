@@ -22,29 +22,30 @@ class MailService
         $this->entityManager = $entityManager;
     }
     
-    public function sendMail($to, $from, $subject, $body)
+    public function sendQueue()
     {
-        $message = new Mail\Message();
-        $message->setBody($body);
-        $message->setFrom($from);
-        $message->addTo($to);
-        $message->setSubject($subject);
-
-        $transport = new SmtpTransport();
-        
-        $transport->setOptions(new SmtpOptions($this->options));
-        $transport->send($message);
+        $queue = $this->entityManager->getRepository('CivMail\Entity\Mail')->findBy(array(
+            'status' => Entity\Mail::QUEUED
+        ));
+        $i = 0;
+        foreach($queue as $mail) {
+            $this->sendMail($mail);
+            $mail->setStatus(Entity\Mail::SENT);
+            $this->entityManager->persist($mail);
+            $i++;
+        }
+        $this->entityManager->flush();
+        return $i;
     }
     
-    public function sendMessage(Array $mail)
+    public function sendMail($mail)
     {
         // Build the message body
-        $parts = $mail['parts'];
         $mimeParts = array();
-        foreach($parts as $part) {
-            $mimePart = new MimePart($part['content']);
-            $mimePart->type = $part['type'];
-            $mimeParts[] = $part;
+        foreach($mail->getParts() as $part) {
+            $mimePart = new MimePart($part->getContent());
+            $mimePart->type = $part->getType();
+            $mimeParts[] = $mimePart;
         }
         $body = new MimeMessage();
         $body->setParts($mimeParts);
@@ -52,17 +53,30 @@ class MailService
         // Build the message.
         $message = new  Mail\Message();
         $message->setBody($body);
-        $message->setFrom($mail['from']);
-        $message->addTo($mail['to']);
-        $message->setSubject($mail['subject']);
+        
+        // Set the participants
+        foreach($mail->getParticipants() as $participant) {
+            if ($participant->getComposition() == 'to') {
+              $message->addTo($participant->getAddress(), $participant->getName());    
+            }
+            if ($participant->getComposition() == 'cc') {
+              $message->addCc($participant->getAddress(), $participant->getName());    
+            }
+            if ($participant->getComposition() == 'bcc') {
+              $message->addBcc($participant->getAddress(), $participant->getName());    
+            }
+            if ($participant->getComposition() == 'from') {
+              $message->addFrom($participant->getAddress(), $participant->getName());    
+            }
+        }
+
+        // Set the subject
+        $message->setSubject($mail->getSubject());
 
         // Create the transport and send.
         $transport = new SmtpTransport();
         $transport->setOptions(new SmtpOptions($this->options));
         $transport->send($message);
-        
-        die(var_dump($mimeParts));
-        
     }
     
     public function createMail($subject, $replyName, $replyAddress)
@@ -93,11 +107,13 @@ class MailService
         return $this;
     }
     
-    public function persist($mail)
+    public function persist($mail, $flush = true)
     {
         $mail->setStatus(Entity\Mail::QUEUED)
              ->setCreatedTime(new DateTime());
         $this->entityManager->persist($mail);
-        $this->entityManager->flush();
+        if ($flush) {
+            $this->entityManager->flush();
+        };
     }
 }

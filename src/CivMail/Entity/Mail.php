@@ -37,12 +37,12 @@ class Mail
     protected $createdTime;
     
     /**
-     * @ORM\OneToMany(targetEntity="MailParticipant", mappedBy="mail", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="MailParticipant", mappedBy="mail", fetch="EAGER", cascade={"persist"})
      */
     protected $participants;
     
     /**
-     * @ORM\OneToMany(targetEntity="MailPart", mappedBy="mail", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="MailPart", mappedBy="mail", fetch="EAGER", cascade={"persist"})
      */
     protected $parts;
     
