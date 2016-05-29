@@ -1,0 +1,29 @@
+{
+    "name": "srayner/civmail",
+    "type": "library",
+    "description": "ZF2 email module",
+    "keywords": ["email","mail", "message", "zf2"],
+    "homepage": "https://github.com/srayner/civmail",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steve Rayner",
+            "email": "srayner02@gmail.com",
+            "homepage": "http://zf2.civrays.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "2.5.0",
+        "doctrine/doctrine-orm-module": "^0.9.2"
+    },
+    "autoload": {
+        "psr-0": {
+            "CivMail": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
