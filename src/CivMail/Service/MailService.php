@@ -2,6 +2,9 @@
 
 namespace CivMail\Service;
 
+use DateTime;
+use CivMail\Entity;
+
 use Zend\Mail;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
@@ -11,10 +14,12 @@ use Zend\Mime\Part as MimePart;
 class MailService
 {
     protected $options;
+    protected $entityManager;
     
-    public function __construct($options)
+    public function __construct($options, $entityManager, $repository)
     {
         $this->options = $options;
+        $this->entityManager = $entityManager;
     }
     
     public function sendMail($to, $from, $subject, $body)
@@ -58,5 +63,39 @@ class MailService
         
         die(var_dump($mimeParts));
         
+    }
+    
+    public function createMail($subject, $replyName, $replyAddress)
+    {
+        $mail = new Entity\Mail();
+        $mail->setSubject($subject)
+             ->setReplyName($replyName)
+             ->setReplyAddress($replyAddress);
+        return $mail;
+    }
+    
+    public function addParticipant($mail, $composition, $name, $address)
+    {
+        $participant = new Entity\Participant();
+        $participant->setComposition($composition)
+                    ->setName($name)
+                    ->setAddress($address);
+        $mail->addParticipant($participant);
+        return $this;
+    }
+    
+    public function addContent($mail, $type, $content)    
+    {
+        $part = new Entity\Part();
+        $part->setType($type)
+             ->setContent($content);
+        $mail->addPart($part);
+        return $this;
+    }
+    
+    public function persist($mail)
+    {
+        $this->entityManager->persist($mail);
+        $this->entityManager->flush();
     }
 }

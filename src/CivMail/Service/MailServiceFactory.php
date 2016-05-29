@@ -10,6 +10,7 @@ class MailServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('config')['CivMail']['transport_options'];
-        return new MailService($config);   
+        $entityManager = $serviceLocator->get('Doctrine\ORM\EntityManager');
+        return new MailService($config, $entityManager);   
     }
 }

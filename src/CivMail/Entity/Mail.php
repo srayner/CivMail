@@ -10,6 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
   */
 class Main
 {
+    const CONSTRUCTION = 0;
+    const QUEUED = 1;
+    const SENT = 2;
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -44,6 +48,7 @@ class Main
     
     public function __construct()
     {
+        $this->status = self::CONSTRUCTION;
         $this->participants = new ArrayCollection();
         $this->parts = new ArrayCollection();
     }
