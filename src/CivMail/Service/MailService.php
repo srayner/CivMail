@@ -73,6 +73,11 @@ class MailService
         // Set the subject
         $message->setSubject($mail->getSubject());
 
+        $contentType = $mail->getContentType();
+        if ($contentType) {
+            $message->getHeaders()->get('content-type')->setType($contentType);
+        }
+        
         // Create the transport and send.
         $transport = new SmtpTransport();
         $transport->setOptions(new SmtpOptions($this->options));

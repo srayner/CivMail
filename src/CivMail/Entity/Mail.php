@@ -24,6 +24,9 @@ class Mail
     /** @ORM\Column(type="string") */
     protected $subject;
     
+     /** @ORM\Column(type="string", name="content_type") */
+    protected $contentType;
+    
     /** @ORM\Column(type="string") */
     protected $status;
     
@@ -75,6 +78,11 @@ class Mail
         return $this->subject;
     }
 
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+    
     public function getStatus()
     {
         return $this->status;
@@ -117,6 +125,12 @@ class Mail
         return $this;
     }
 
+    public function setContentType($contentType)
+    {
+        $this->contentType = $contentType;
+        return $this;
+    }
+    
     public function setStatus($status)
     {
         $this->status = $status;

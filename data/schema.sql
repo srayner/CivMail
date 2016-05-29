@@ -2,6 +2,7 @@
 CREATE TABLE mail (
   id            integer(11)  not null auto_increment,
   subject       varchar(128)     null,
+  content_type  varchar(255)     null,
   status        integer(11)  not null,
   reply_name    varchar(64)  not null,
   reply_address varchar(254) not null,
