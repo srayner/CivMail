@@ -16,10 +16,10 @@ class MailPart
      */
     protected $id;
     
-    /* @ORM\Column(type="string") */
+    /** @ORM\Column(type="string") */
     protected $type;
     
-    /* @ORM\Column(type="text") */
+    /** @ORM\Column(type="text") */
     protected $content;
     
     /**

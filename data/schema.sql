@@ -1,11 +1,11 @@
 -- Mail Table
 CREATE TABLE mail (
-  id             integer(11)  not null auto_increment,
-  subject        varchar(128)     null,
-  status         integer(11)  not null,
-  reply_name     varchar(64)  not null,
-  replay_address varchar(254) not null,
-  created_time   DateTime     not null,
+  id            integer(11)  not null auto_increment,
+  subject       varchar(128)     null,
+  status        integer(11)  not null,
+  reply_name    varchar(64)  not null,
+  reply_address varchar(254) not null,
+  created_time  DateTime     not null,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 

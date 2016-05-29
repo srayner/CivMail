@@ -16,7 +16,7 @@ class MailService
     protected $options;
     protected $entityManager;
     
-    public function __construct($options, $entityManager, $repository)
+    public function __construct($options, $entityManager)
     {
         $this->options = $options;
         $this->entityManager = $entityManager;
@@ -76,7 +76,7 @@ class MailService
     
     public function addParticipant($mail, $composition, $name, $address)
     {
-        $participant = new Entity\Participant();
+        $participant = new Entity\MailParticipant();
         $participant->setComposition($composition)
                     ->setName($name)
                     ->setAddress($address);
@@ -86,7 +86,7 @@ class MailService
     
     public function addContent($mail, $type, $content)    
     {
-        $part = new Entity\Part();
+        $part = new Entity\MailPart();
         $part->setType($type)
              ->setContent($content);
         $mail->addPart($part);
@@ -95,6 +95,8 @@ class MailService
     
     public function persist($mail)
     {
+        $mail->setStatus(Entity\Mail::QUEUED)
+             ->setCreatedTime(new DateTime());
         $this->entityManager->persist($mail);
         $this->entityManager->flush();
     }

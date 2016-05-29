@@ -16,13 +16,13 @@ class MailParticipant
      */
     protected $id;
     
-    /* @ORM\Column(type="string") */
+    /** @ORM\Column(type="string") */
     protected $composition;
     
-    /* @ORM\Column(type="string") */
+    /** @ORM\Column(type="string") */
     protected $name;
     
-    /* @ORM\Column(type="string") */
+    /** @ORM\Column(type="string") */
     protected $address;
     
     /**

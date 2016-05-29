@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /** @ORM\Entity
   * @ORM\Table(name="mail")
   */
-class Main
+class Mail
 {
     const CONSTRUCTION = 0;
     const QUEUED = 1;
@@ -21,28 +21,28 @@ class Main
      */
     protected $id;
     
-    /* @ORM\Column(type="string") */
+    /** @ORM\Column(type="string") */
     protected $subject;
     
-    /* @ORM\Column(type="string") */
+    /** @ORM\Column(type="string") */
     protected $status;
     
-    /* @ORM\Column(type="string", name="reply_name") */
+    /** @ORM\Column(type="string", name="reply_name") */
     protected $replyName;
     
-    /* @ORM\Column(type="string", name="reply_address") */
-    protected $replayAddress;
+    /** @ORM\Column(type="string", name="reply_address") */
+    protected $replyAddress;
     
-    /* @ORM\Column(type="DateTime", name="created_time") */
+    /** @ORM\Column(type="datetime", name="created_time") */
     protected $createdTime;
     
     /**
-     * @ORM\OneToMany(targetEntity="MailParticipant", mappedBy="mail")
+     * @ORM\OneToMany(targetEntity="MailParticipant", mappedBy="mail", cascade={"persist"})
      */
     protected $participants;
     
     /**
-     * @ORM\OneToMany(targetEntity="MailPart", mappedBy="mail")
+     * @ORM\OneToMany(targetEntity="MailPart", mappedBy="mail", cascade={"persist"})
      */
     protected $parts;
     
@@ -56,11 +56,13 @@ class Main
     public function addParticipant($participant)
     {
         $this->participants[] = $participant;
+        $participant->setMail($this);
     }
     
     public function addPart($part)
     {
         $this->parts[] = $part;
+        $part->setMail($this);
     }
     
     public function getId()
@@ -83,9 +85,9 @@ class Main
         return $this->replyName;
     }
 
-    public function getReplayAddress()
+    public function getReplyAddress()
     {
-        return $this->replayAddress;
+        return $this->replyAddress;
     }
 
     public function getCreatedTime()
@@ -127,9 +129,9 @@ class Main
         return $this;
     }
 
-    public function setReplayAddress($replayAddress)
+    public function setReplyAddress($replyAddress)
     {
-        $this->replayAddress = $replayAddress;
+        $this->replyAddress = $replyAddress;
         return $this;
     }
 
