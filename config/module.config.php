@@ -25,4 +25,29 @@ return array(
             'CivMail\MailService' => 'CivMail\Service\MailServiceFactory',
         ),
     ),
+    
+    'controllers' => array(
+        'invokables' => array(
+            'CivMail\Controller\Mail' => 'CivMail\Controller\MailController'
+        ),
+    ),
+    
+    // Console routes
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'processmailqueue' => array(
+                    'type'    => 'simple',
+                    'options' => array(
+                        'route'    => 'processmailqueue',
+                        'defaults' => array(
+                            '__NAMESPACE__' => 'CivMail\Controller',
+                            'controller' => 'CivMail\Controller\Mail',
+                            'action'     => 'processqueue'
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
 );
